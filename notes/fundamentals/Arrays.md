@@ -1,4 +1,7 @@
+> 1-3-5
 # Arrays:
+
+
 
 ## Array Syntax in C++
 
@@ -42,6 +45,10 @@ int main() {
 }
 ```
 
+---
+
+<details>
+<summary> Array Syntax Rules (Including Modern C++ Standards) </summary>
 
 ## Array Syntax Rules (Including Modern C++ Standards)
 
@@ -109,5 +116,147 @@ Here are the key syntax rules for arrays in C++ (including C++11 and later):
 > For most modern C++ code, prefer `std::array` for fixed-size and `std::vector` for dynamic-size arrays.
 
 
+</details>
+
+---
+
+<details>
+<summary> What are the methods available in built-in arrays? </summary>
+
+Built-in arrays in C++ do not have any member methods or variables (like `.length()` or `.size()`). They are simply blocks of contiguous memory. You access and manipulate them using standard C++ operators and functions:
+
+- **Accessing Elements:**
+  - Use the index operator: `arr[0]`, `arr[1]`, etc.
+
+- **Getting Array Size:**
+  - Use the `sizeof` operator:
+    ```cpp
+    int arr[5];
+    int size = sizeof(arr) / sizeof(arr[0]);
+    ```
+
+- **No Built-in Methods:**
+  - Built-in arrays do NOT have methods like `.length()`, `.size()`, `.begin()`, or `.end()`.
+
+- **Modern Alternatives:**
+  - `std::array` (C++11): Has `.size()`, `.at()`, `.begin()`, `.end()`, etc.
+  - `std::vector`: Dynamic size, many useful methods.
+
+> For more features and safety, prefer `std::array` or `std::vector` in modern C++.
+
+</details>
+
+---
+
+
+<details>
+<summary> how to iterate over the array and display the values? </summary>
+
+You can iterate over a built-in array and display its values using a loop. Here are two common ways:
+
+**1. Using a for loop with array size:**
+```cpp
+int arr[5] = {1, 2, 3, 4, 5};
+int size = sizeof(arr) / sizeof(arr[0]);
+for (int i = 0; i < size; i++) {
+    std::cout << arr[i] << " ";
+}
+```
+
+**2. Using a range-based for loop (C++11 and later):**
+```cpp
+int arr[5] = {1, 2, 3, 4, 5};
+for (int value : arr) {
+    std::cout << value << " ";
+}
+```
+
+Both methods will print all the elements of the array.
+
+</details>
+
+---
+
+<details>
+<summary> How to pass array as a method parameter? </summary>
+
+In C++, you can pass an array to a function in several ways:
+
+**1. As a pointer (most common):**
+```cpp
+void display(int numbers[], int size);
+// or equivalently
+void display(int* numbers, int size);
+```
+You must also pass the array size, because inside the function, `sizeof(numbers)` gives the size of the pointer, not the array.
+
+**Example:**
+```cpp
+void display(int numbers[], int size) {
+    for(int i = 0; i < size; i++) {
+        std::cout << numbers[i] << " ";
+    }
+}
+int main() {
+    int arr[5] = {1, 2, 3, 4, 5};
+    display(arr, 5);
+}
+```
+
+**2. As a reference to an array of fixed size (C++11 and later):**
+```cpp
+void display(const int (&numbers)[5]) {
+    for(int i = 0; i < 5; i++) {
+        std::cout << numbers[i] << " ";
+    }
+}
+```
+
+**Key Point:**
+- When you pass an array as a parameter, it decays to a pointer, so always pass the size separately unless you use references or modern containers like `std::array` or `std::vector`.
+
+> For most use cases, pass both the array and its size to the function.
+
+</details>
+
+---
+
+<details>
+<summary> Why can't we get the array length inside a function like in Java? </summary>
+
+In Java, arrays have a built-in `length` property (e.g., `array.length`). But in C++, when you pass an array to a function, it "decays" to a pointer. This means:
+
+- The function receives only the address of the first element, not the whole array.
+- The size information is lost; `sizeof(numbers)` inside the function gives the size of the pointer, not the array.
+
+**Example:**
+```cpp
+void display(int numbers[]){
+    int len = sizeof(numbers) / sizeof(numbers[0]); // This does NOT give array length!
+    // ...
+}
+```
+If you call `display(arr)` where `arr` is `int arr[5];`, inside `display`, `sizeof(numbers)` is just the size of a pointer (usually 4 or 8 bytes), not the array.
+
+**Correct way:**
+- Always pass the array size as a separate parameter:
+  ```cpp
+  void display(int numbers[], int size) {
+      for(int i = 0; i < size; i++) {
+          std::cout << numbers[i] << " ";
+      }
+  }
+  ```
+
+**Summary Table:**
+
+| Language | Array "knows" its length? | How to get length?         |
+|----------|--------------------------|----------------------------|
+| Java     | Yes                      | `array.length`             |
+| C++      | No (after passing)       | Pass size as a parameter   |
+
+> Only use `sizeof(array) / sizeof(array[0])` in the same scope where the array is declared, not inside a function that takes an array parameter.
+
+</details>
 
 
